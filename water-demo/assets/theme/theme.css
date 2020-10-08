@@ -1,0 +1,32 @@
+@import "./range-input.css";
+
+
+body {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 16px;
+	background-color: #eee;
+	color: #6a6a6a;
+}
+
+small 	{ opacity: 0.8; }
+a 		{ color: #0cc; }
+h2, h2, h3, h4, h5, h6, p {
+	margin: 0.4em 0;
+}
+
+body > aside {
+	background-color: #40403f;
+	color: #fff;
+}
+
+body > main > canvas {
+	box-shadow: 0px 0px 10px #0003;
+	background-color: white;
+}
+
+body > article {
+	background-color: white;
+}
+
+
+

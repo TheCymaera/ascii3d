@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"rootDir": "typescript",
+		"outDir": "javascript",
+		"module": "ESNext",
+		"target": "ES2020",
+		
+		"strictNullChecks": true,
+		"noImplicitThis": true,
+		"noImplicitReturns": true,
+		"alwaysStrict": true,
+
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"declaration": true,
+		"removeComments": true,
+
+		"skipDefaultLibCheck": true,
+		"allowJs": true
+	}
+}

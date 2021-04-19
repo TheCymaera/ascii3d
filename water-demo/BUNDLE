@@ -1,3 +1,0 @@
-rollup water-demo/javascript/main.js --file water-demo/javascript/ROLLUP.min.js --format iife
-npx google-closure-compiler --compilation_level=ADVANCED --js=water-demo/javascript/ROLLUP.min.js --js_output_file water-demo/javascript/main.min.js
-del water-demo/javascript/ROLLUP.min.js

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html class="hadron-theme-light">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>	
+	
+	<!-- title & icons -->
+	<title>Ascii3D Documentation</title>
+    <link rel="icon" href="/favicon.ico" type="image/png"/>
+	
+	<!-- info -->
+    <meta name="author" content="Morgan"/>
+    <meta name="description" content="A text-based 3D renderer for JavaScript."/>
+    <meta name="keywords" content="Heledron, Cymaera, Ascii3D, OpenGL, WebGL"/>
+	
+	<!-- sharing -->
+    <meta property="og:title" content="Ascii3D Documentation"/>
+    <meta property="og:description" content="A text-based 3D renderer for JavaScript."/>
+    <meta property="og:url"   content="https://heledron.com/misc/ascii3d/"/>
+    <meta property="og:image" content="https://heledron.com/misc/ascii3d/thumbnail.png"/>
+    <meta property="og:type"  content="website"/>
+
+	<!-- styles -->
+	<link rel="stylesheet" type="text/css" href="/shared/fontawesome-free-5.13.1-web/css/all.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/shared/hadron/css/themes.css"/>
+	<link rel="stylesheet" type="text/css" href="/shared/hadron/css/elements.css"/>
+	<link rel="stylesheet" type="text/css" href="/shared/hadron/css/classes.css"/>
+	<link rel="stylesheet" type="text/css" href="/shared/hadron/css/pages/standard-page.css"/>
+	<link rel="stylesheet" type="text/css" href="/shared/hadron/css/pages/documentation.css"/>
+	<link rel="stylesheet" type="text/css" href="./css/page.css"/>
+</head>
+<body class="fillWindow sp">
+	<header class="sp-header">
+		<a class="text" href="/">
+			<h1>Heledron</h1>
+		</a>
+	</header>
+
+	<div class="sp-body documentation-container">
+		<main>
+			<h1 class="documentation-title">Ascii3D</h1>
+			<hr>
+			<small style="float: right;">Last updated: 15th April, 2021 | by Morgan</small>
+
+			<h2 id="introduction">Introduction</h2>
+			<p>	
+				Ascii3D is a text-based 3D rendering library for JavaScript.
+				It is avalible as an ES6 TypeScript/JavaScript module on 
+				<a href="https://github.com/TheCymaera/ascii3d" target="_blank">GitHub</a>.
+			</p>
+			<br/>
+
+			<h2 id="demo">Demo</h2>
+			<iframe 
+				id="demoIframe"
+				class="card"
+				allowfullscreen 
+			></iframe>
+			<br/>
+
+			<div id="demoControls">
+				<button data-value="./demos/rainbow-triangle/">Rainbow Triangle</button>
+				<button data-value="./demos/rotating-cube/">Rotating Cube</button>
+				<a href="./demos/water/" target="_blank" style="white-space: nowrap;">Water Shader</a>
+			</div>
+			<br/>
+
+			<script type="module">
+				const demoControls = document.querySelector("#demoControls");
+
+				function buttonOnClick() {
+					if (this.dataset.active !== undefined) return;
+					delete demoControls.children[0].dataset.active;
+					delete demoControls.children[1].dataset.active;
+					this.dataset.active = "";
+					demoIframe.contentWindow.location.replace(this.dataset.value);
+				}
+
+				demoControls.children[0].addEventListener("click",buttonOnClick);
+				demoControls.children[1].addEventListener("click",buttonOnClick);
+				demoControls.children[1].click();
+			</script>
+
+			<h2 id="render-buffers">Render Buffers</h2>
+			<p>	
+				A render buffer contains the result of draw calls.
+				They have a width, height, and an array of character-codes, RGBA, and depth values.
+				A render buffer is created like so:
+			</p>
+			<code-block>
+				import { RenderBuffer } from "./ascii-3d.js";<br />
+				<br />
+				const width = 30, height = 30;<br />
+				const renderBuffer = new RenderBuffer(width, height);
+			</code-block>
+			<br/>
+
+			<h2 id="vertex-arrays">Vertex Arrays</h2>
+			<p>
+				A vertex array contains arbitrary numeric data about vertices. They normally contain
+				spacial data (X, Y, Z), color (R, G, B, A), UV, and/or character codes.
+			</p>
+			<code-block style="white-space: pre;">const vertexArray = [
+// 	X  	 Y    R    G    B    CharCode
+	[-.5, -.5, 1.0, 1.0, 0.0, "#".charCodeAt(0)],
+	[-.5, 0.5, 0.0, 1.0, 1.0, "#".charCodeAt(0)],
+	[0.5, 0.5, 1.0, 0.0, 1.0, "#".charCodeAt(0)],
+	[0.5, -.5, 1.0, 1.0, 0.0, "#".charCodeAt(0)]
+];</code-block>
+			<br/>
+			
+			<p>
+				A lot of 3D models are stored as vertex buffers and index buffers.
+				You can convert them into a vertex array using the
+				<code>createVertexArray()</code> function. For example:
+			</p>
+			<code-block style="white-space: pre;">import { createVertexArray } from "./ascii-3d.js";
+	
+const vertexBuffer = [ 1, 2, 3 ];
+const vertexSize = 1;
+const indexBuffer  = [ 1, 2, 3 ];
+const vertexArray  = createVertexArray(vertexBuffer, vertexSize, indexBuffer);</code-block>
+			<br/>
+
+			<h2 id="vertex-shaders-and-fragment-shaders">Vertex Shaders and Fragment Shaders</h2>
+			<p>
+				A vertex shader accepts a vertex as an input and outputs a clipspace-position and a 
+				<dfn title="Also known as a pixel.">fragment</dfn>. 
+				The clipspace-position is 4-component vector. 
+				The fragment is an array of arbitrary numeric values describing the pixel at the vertex. 
+				It is interpolated for every pixel and sent to the fragment shader. 
+			</p>
+			
+			<code-block style="white-space: pre;">function vertexShader([x, y, r, g, b, charCode]) {
+	return {
+		position: [x, y, 0, 1],
+		fragment: [r, g, b, 1, charCode]
+	}
+}</code-block>
+			<br/>
+			
+			<p>
+				A fragment shader accepts a fragment as an input (provided by the vertex shader), 
+				and outputs its color and character code.
+			</p>
+
+			<code-block style="white-space: pre;">function fragmentShader(fragment) {
+	// output directly. ([r, g, b, a, charCode])
+	return fragment;
+}</code-block>
+			<br/>
+			
+			<h2 id="draw-calls">Draw Calls</h2>
+			<p>
+				To make a draw call, use the <code>renderBuffer.drawTriangles()</code> method.
+				If depth-testing is enabled, pixels with a greater depth will not be drawn over.
+			</p>
+			<code-block>
+				const doDepthTesting = true;<br>
+				renderBuffer.drawTriangles(vertices, vertexShader, fragmentShader, doDepthTesting);
+			</code-block>
+			<br/>
+
+			<h2 id="rendering-to-a-2d-canvas">Rendering to a 2D canvas</h2>
+			<p>
+				One way to display a render buffer is through an HTML canvas element.
+			</p>
+			<code-block style="white-space: pre;">renderBuffer.renderToCanvas(
+	ctx, 			// CanvasRenderingContext2D
+	letterSpacing, 	// letter spacing
+	0, 0 			// optional: start position (from bottom left)
+);</code-block>
+			<br/>
+
+			<h2 id="attribution">Attribution</h2>
+			<p>
+				Special thanks to:
+				<ul>
+					<li><a href="https://asciicker.com/x13/">ASCIICKER</a> for inspiring this project.</li>
+					<li><a href="https://github.com/sessamekesh">Sessamekesh</a> for the 
+						<a href="https://github.com/sessamekesh/IndigoCS-webgl-tutorials">models</a> adapted for the demos.<br>
+					</li>
+					<li>The <a href="http://glmatrix.net/">glMatrix</a> library used in the rotating cube and water shader demo.</li>
+					<li>This <a href="https://stackoverflow.com/questions/24441631/how-exactly-does-opengl-do-perspectively-correct-linear-interpolation">Stack Overflow thread</a>
+						for holding my hand through the maths.
+					</li>
+				</ul>
+			</p>
+			<br/>
+
+			<h2 id="downloads">Downloads</h2>
+			<h3>License</h3>
+			<p>
+				All downloadable files can be used for commerical or non-commerical purposes. 
+				Do not resell. 
+				Attribution is appreciated but not due.
+			</p>
+
+			<h3>Links</h3>
+			Complete Library: <a href="./typescript/ascii3d.ts" download="ascii3d.ts">ascii3d.ts</a><br>
+			Library and demos: <a href="https://github.com/TheCymaera/ascii3d" target="_blank">GitHub</a><br>
+
+			<div style="height: 20em;"></div>
+		</main>
+		<aside class="documentation-sticky-sidebar">
+			<nav>
+				<h2>Table of contents</h2>
+				<ul class="documentation-table-of-contents">
+					<li><a href="#introduction">Introduction</a></li>
+					<li><a href="#demo">Demo</a></li>
+					<li><a href="#render-buffers">Render Buffers</a></li>
+					<li><a href="#vertex-arrays">Vertex Arrays</a></li>
+					<li><a href="#vertex-shaders-and-fragment-shaders">Vertex Shaders and Fragment Shaders</a></li>
+					<li><a href="#draw-calls">Draw Calls</a></li>
+					<li><a href="#rendering-to-a-2d-canvas">Rendering to a 2D canvas</a></li>
+					<li><a href="#attribution">Attribution</a></li>
+					<li><a href="#downloads">Downloads</a></li>
+				</ul>
+			</nav>
+		</aside>
+	</div>
+
+	<footer class="sp-footer">
+		<nav class="sp-footer-social">
+			<a class="text" target="_blank" href="https://twitter.com/cymaera" title="Twitter">
+				<i class="fab fa-twitter"></i>
+			</a>
+			
+			<a class="text" target="_blank" href="https://github.com/TheCymaera" title="GitHub">
+				<i class="fab fa-github"></i>
+			</a>
+	
+			<a class="text" target="_blank" href="https://www.reddit.com/user/Cymaera/" title="Reddit">
+				<i class="fab fa-reddit-alien"></i>
+			</a>
+			
+			<a class="text" target="_top" href="mailto:heledron@gmail.com" title="Email">
+				<i class="fa fa-envelope"></i>
+			</a>
+		</nav>
+	
+		<p>
+			All possible and potential rights reserved. Contact me at
+			<a href="mailto:heledron@gmail.com" target="_top">heledron@gmail.com</a>.
+		</p>
+	</footer>
+</body>
+</html>

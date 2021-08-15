@@ -1,0 +1,30 @@
+{
+  "name": "ascii3d",
+  "version": "1.0.0",
+  "description": "A text-based 3D rendering library for JavaScript and TypeScript",
+  "main": "dst/ascii3d.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build-watch": "tsc -p tsconfig.json --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheCymaera/ascii3d.git"
+  },
+  "keywords": [
+    "ascii",
+    "3d",
+    "text",
+    "rendering",
+    "renderer",
+    "webgl",
+    "opengl",
+	"graphics"
+  ],
+  "author": "Cymaera",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheCymaera/ascii3d/issues"
+  },
+  "homepage": "https://heledron.com/misc/ascii3d/"
+}

@@ -1,7 +1,7 @@
 /**
- * Ascii 3D
+ * Ascii3D
  * ======================================================
- * Can be used for commerical or non-commerical purposes.
+ * Can be used for commercial or non-commercial purposes.
  * DO NOT RESELL.
  * Attribution is appreciated but not due.
  * ======================================================
@@ -13,17 +13,18 @@
 export type ClipspacePosition = [number, number, number, number];
 
 export type Vertex = ArrayLike<number>;
+
 export interface VertexShaderOutput<F extends Fragment> {
 	position: ClipspacePosition, 
 	fragment: F
 };
 
 export type Fragment = number[];
+
 export type FragmentShaderOutput = [number, number, number, number, number];
 
-
 export type VertexShader<V extends Vertex, F extends Fragment> = (vertex: V) => VertexShaderOutput<F>;
-export type FragmentShader<O extends Fragment> = (input: O) => FragmentShaderOutput;
+export type FragmentShader<F extends Fragment> = (input: F) => FragmentShaderOutput;
 
 export type VertexArray<V extends Vertex> = V[];
 
@@ -35,7 +36,6 @@ export interface PixelInfo {
 	char: number;
 	depth: number;
 }
-
 
 export class RenderBuffer {
 	readonly width: number;
@@ -77,13 +77,13 @@ export class RenderBuffer {
 		// Input to fragment shader
 		const input = new Array(frag1.length) as F;
 		
-		// Cache & noramlize coordinates
+		// Cache & normalize coordinates
 		const w1 = Math.abs(1/pos1[3]), w2 = Math.abs(1/pos2[3]), w3 = Math.abs(1/pos3[3]);
 		const x1 = pos1[0]*w1, y1 = pos1[1]*w1, z1 = pos1[2]*w1;
 		const x2 = pos2[0]*w2, y2 = pos2[1]*w2, z2 = pos2[2]*w2;
 		const x3 = pos3[0]*w3, y3 = pos3[1]*w3, z3 = pos3[2]*w3;
 		
-		// Precompute constants for finding barycentric coordinates
+		// Pre-compute constants for finding barycentric coordinates
 		const denom = 1/((y2-y3)*(x1-x3)+(x3-x2)*(y1-y3));
 		const l1 = (y2-y3), l2 = (y3-y1), r1 = (x3-x2), r2 = (x1-x3);
 		
@@ -193,7 +193,7 @@ export class RenderBuffer {
 				renderingContext.fillText(char, printX, printY);
 			}
 			
-			// increament
+			// increment
 			printX += cellSize;
 
 			// Break line if end of line is reached.

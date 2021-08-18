@@ -1,6 +1,6 @@
 {
 	"name": "ascii3d",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A text-based 3D rendering library for JavaScript and TypeScript",
 	"main": "dst/ascii3d.js",
 	"type": "module",

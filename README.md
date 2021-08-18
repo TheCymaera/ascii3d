@@ -8,6 +8,12 @@ Ascii3D is a text-based 3D rendering library for JavaScript and TypeScript.
 - [Rotating Cube](https://heledron.com/misc/ascii3d/demos/rotating-cube/)
 - [Water Shader](https://heledron.com/misc/ascii3d/demos/water/)
 
+## Installation
+Install via [npm](https://www.npmjs.com/package/ascii3d):
+```shell
+npm install ascii3d
+```
+
 ## Render Buffers
 A render buffer contains the result of draw calls. They have a width, height, and an array of character-codes, RGBA, and depth values. A render buffer is created like so:
 
